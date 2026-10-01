@@ -1,13 +1,19 @@
-import { save } from "../core/storage.js";
-import { SETTINGS_KEYS, SPEED_PRESETS } from "../core/settings.js";
+import { save } from "../core/storage.js?v=20261001-3";
+import { SETTINGS_KEYS, SPEED_PRESETS } from "../core/settings.js?v=20261001-3";
 
 export function mountSettingsMenu({ settings, sectionOrder, sectionTitle, cards, speedLabels }) {
   const sectionChips = document.getElementById("sectionChips");
   const speedChips = document.getElementById("speedChips");
   const menuHint = document.getElementById("menuHint");
+  const startButton = document.getElementById("startBtn");
 
   function updateHint() {
     const cardCount = cards.filter((card) => settings.sections.includes(card.s)).length;
+    startButton.disabled = cardCount === 0;
+    if (startButton.disabled) {
+      menuHint.textContent = "Формулы не загрузились. Обновите страницу и попробуйте ещё раз.";
+      return;
+    }
     menuHint.textContent = "Разделов: " + settings.sections.length + " · карточек: " + cardCount +
       " · скорость: " + (speedLabels[settings.difficulty] || settings.difficulty);
   }

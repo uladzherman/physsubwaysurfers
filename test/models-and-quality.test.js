@@ -50,8 +50,8 @@ test("local GLB files are compact, valid containers with the expected rigs", asy
 
 test("model loading uses GitHub Pages-safe paths and retains procedural fallbacks", async () => {
   const game = await readFile(new URL("../assets/js/game.js", import.meta.url), "utf8");
-  assert.match(game, /new URL\("\.\.\/models\/pembroke-corgi\.glb", import\.meta\.url\)/);
-  assert.match(game, /new URL\("\.\.\/models\/tropical-palm\.glb", import\.meta\.url\)/);
+  assert.match(game, /new URL\("\.\.\/models\/pembroke-corgi\.glb\?v=20261001-3", import\.meta\.url\)/);
+  assert.match(game, /new URL\("\.\.\/models\/tropical-palm\.glb\?v=20261001-3", import\.meta\.url\)/);
   assert.match(game, /buildProceduralPlayer\(\)/);
   assert.match(game, /buildProceduralPalmTree\(\)/);
   assert.match(game, /Promise\.allSettled/);

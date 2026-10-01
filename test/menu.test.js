@@ -32,7 +32,7 @@ test("settings menu preserves one section and saves selections and speed", () =>
   const originalDocument = globalThis.document;
   const originalStorage = globalThis.localStorage;
   const elements = new Map();
-  for (const id of ["sectionChips", "speedChips", "menuHint"]) elements.set(id, new FakeElement());
+  for (const id of ["sectionChips", "speedChips", "menuHint", "startBtn"]) elements.set(id, new FakeElement());
   for (const speed of ["slow", "normal", "fast"]) {
     const button = new FakeElement();
     button.setAttribute("data-speed", speed);
@@ -61,6 +61,7 @@ test("settings menu preserves one section and saves selections and speed", () =>
     const getSectionButton = (title) => elements.get("sectionChips").children.find((button) => button.textContent === title);
     getSectionButton("Кинематика").click();
     assert.deepEqual(settings.sections, ["kin"]);
+    assert.equal(elements.get("startBtn").disabled, false);
     getSectionButton("Динамика").click();
     assert.deepEqual(settings.sections, ["kin", "dyn"]);
     getSectionButton("Кинематика").click();
@@ -72,6 +73,34 @@ test("settings menu preserves one section and saves selections and speed", () =>
     assert.equal(JSON.parse(values.get("phys-runner-speed-v1")), "fast");
     assert.ok(elements.get("speedChips").children.find((button) => button.getAttribute("data-speed") === "fast").classList.contains("is-active"));
     assert.match(elements.get("menuHint").textContent, /карточек: 2/);
+  } finally {
+    globalThis.document = originalDocument;
+    globalThis.localStorage = originalStorage;
+  }
+});
+
+test("an empty card set disables the start button and explains the problem", () => {
+  const originalDocument = globalThis.document;
+  const originalStorage = globalThis.localStorage;
+  const elements = new Map();
+  for (const id of ["sectionChips", "speedChips", "menuHint", "startBtn"]) elements.set(id, new FakeElement());
+  const values = new Map();
+  globalThis.document = {
+    getElementById: (id) => elements.get(id),
+    createElement: () => new FakeElement()
+  };
+  globalThis.localStorage = { setItem: (key, value) => values.set(key, value) };
+
+  try {
+    mountSettingsMenu({
+      settings: { sections: ["kin"], difficulty: "normal" },
+      sectionOrder: ["kin"],
+      sectionTitle: { kin: "Кинематика" },
+      cards: [],
+      speedLabels: { normal: "обычно" }
+    });
+    assert.equal(elements.get("startBtn").disabled, true);
+    assert.match(elements.get("menuHint").textContent, /Формулы не загрузились/);
   } finally {
     globalThis.document = originalDocument;
     globalThis.localStorage = originalStorage;

@@ -1,4 +1,4 @@
-import { shuffle } from "../core/random.js";
+import { shuffle } from "../core/random.js?v=20261001-3";
 
 export function createQuizContent(cards, sections, random = Math.random) {
   const allUnits = [];

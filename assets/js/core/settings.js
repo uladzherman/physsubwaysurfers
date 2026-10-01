@@ -1,4 +1,4 @@
-import { load } from "./storage.js";
+import { load } from "./storage.js?v=20261001-3";
 
 export const SETTINGS_KEYS = {
   sections: "phys-runner-sections-v1",

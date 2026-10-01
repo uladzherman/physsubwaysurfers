@@ -359,6 +359,11 @@ kbd {
   overflow: hidden;
   transition: transform 0.12s, filter 0.15s, box-shadow 0.15s;
 }
+.btn:disabled {
+  cursor: not-allowed;
+  filter: grayscale(0.65);
+  opacity: 0.52;
+}
 .btn:active { transform: scale(0.95); }
 .btn--primary {
   color: #08111f;

@@ -7,16 +7,17 @@
  */
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { CARDS, SECTIONS } from "./data/cards.js";
-import { clamp, randomBetween as rand, shuffle } from "./core/random.js";
-import { load, save } from "./core/storage.js";
-import { loadSettings, SPEED_PRESETS, SPEED_LABELS } from "./core/settings.js";
-import { graphicsProfile } from "./core/quality.js";
-import { bindControls } from "./input/controls.js";
-import { createQuizContent } from "./quiz/questions.js";
-import { formulaLabelRows } from "./quiz/math-layout.js";
-import { mountSettingsMenu } from "./ui/menu.js";
+import { CARDS, SECTIONS } from "./data/cards.js?v=20261001-3";
+import { clamp, randomBetween as rand, shuffle } from "./core/random.js?v=20261001-3";
+import { load, save } from "./core/storage.js?v=20261001-3";
+import { loadSettings, SPEED_PRESETS, SPEED_LABELS } from "./core/settings.js?v=20261001-3";
+import { graphicsProfile } from "./core/quality.js?v=20261001-3";
+import { bindControls } from "./input/controls.js?v=20261001-3";
+import { createQuizContent } from "./quiz/questions.js?v=20261001-3";
+import { formulaLabelRows } from "./quiz/math-layout.js?v=20261001-3";
+import { mountSettingsMenu } from "./ui/menu.js?v=20261001-3";
 
+// Keep this token in sync with index.html to avoid stale ES modules in Safari.
 /* ---------------- Константы ---------------- */
 const LANE_X = [-2.2, 0, 2.2];
 const SPAWN_Z = -112;
@@ -702,8 +703,8 @@ function spawnTree(side) {
 
 async function loadStaticModels() {
   const loader = new GLTFLoader();
-  const corgiUrl = new URL("../models/pembroke-corgi.glb", import.meta.url).href;
-  const palmUrl = new URL("../models/tropical-palm.glb", import.meta.url).href;
+  const corgiUrl = new URL("../models/pembroke-corgi.glb?v=20261001-3", import.meta.url).href;
+  const palmUrl = new URL("../models/tropical-palm.glb?v=20261001-3", import.meta.url).href;
   const [corgiResult, palmResult] = await Promise.allSettled([
     loader.loadAsync(corgiUrl),
     loader.loadAsync(palmUrl)
@@ -2036,6 +2037,14 @@ function startGame() {
   resetWorld();
   state.mode = "playing";
   state.deck = buildSelectedDeck();
+  if (!state.deck.length) {
+    state.mode = "menu";
+    menuEl.hidden = false;
+    hud.hidden = true;
+    pauseBtn.hidden = true;
+    byId("menuHint").textContent = "Формулы не загрузились. Обновите страницу и попробуйте ещё раз.";
+    return;
+  }
   state.deckPos = 0;
   state.currentSection = settings.sections[0];
   applyBiome(settings.sections[0]);

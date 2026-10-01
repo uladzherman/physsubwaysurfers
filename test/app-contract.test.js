@@ -25,7 +25,8 @@ test("every statically referenced UI element exists in the HTML", async () => {
 
 test("the app is bootstrapped through one module entry", async () => {
   const html = await readFile(new URL("index.html", root), "utf8");
-  assert.match(html, /<script type="module" src="assets\/js\/game\.js"><\/script>/);
+  assert.match(html, /<script type="module" src="assets\/js\/game\.js\?v=20261001-3"><\/script>/);
+  assert.match(html, /href="assets\/css\/style\.css\?v=20261001-3"/);
   assert.doesNotMatch(html, /assets\/js\/(?:data\/cards|questions)\.js/);
   assert.doesNotMatch(html, /(?:href|src)=["']\/(?!\/)/);
 });
@@ -44,6 +45,7 @@ test("all local JavaScript module imports resolve to project files", async () =>
     for (const specifier of imports) {
       if (!specifier.startsWith(".")) continue;
       const importedPath = new URL(specifier, new URL(path, root));
+      assert.equal(importedPath.searchParams.get("v"), "20261001-3", `${path} cache-busts ${specifier}`);
       assert.equal(importedPath.pathname.startsWith(new URL(root).pathname), true);
       pending.push(importedPath.pathname.slice(new URL(root).pathname.length));
     }
@@ -126,4 +128,12 @@ test("answer correctness is evaluated only after choosing a gate", async () => {
   assert.match(game, /if \(ng && ng\.q && ng\.maxZ > -plead\)/);
   assert.match(game, /function makePortal\(\)/);
   assert.match(game, /if \(item\.ok\) \{/);
+});
+
+test("game start is guarded when the quiz catalog is empty", async () => {
+  const game = await readFile(new URL("assets/js/game.js", root), "utf8");
+  const menu = await readFile(new URL("assets/js/ui/menu.js", root), "utf8");
+  assert.match(game, /if \(!state\.deck\.length\) \{/);
+  assert.match(menu, /startButton\.disabled = cardCount === 0/);
+  assert.match(menu, /Формулы не загрузились/);
 });
