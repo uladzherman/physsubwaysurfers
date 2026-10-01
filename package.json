@@ -1,0 +1,13 @@
+{
+  "name": "formula-runner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8777 --bind 127.0.0.1",
+    "test": "node --test",
+    "models": "node scripts/create-models.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

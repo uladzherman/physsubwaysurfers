@@ -78,29 +78,21 @@ body::after {
   top: 0;
   left: 0;
   transform-origin: center center;
-  padding: 10px 16px;
-  border-radius: 16px;
-  background: linear-gradient(160deg, rgba(14, 19, 40, 0.94), rgba(6, 9, 24, 0.94));
-  border: 2px solid rgba(255, 255, 255, 0.22);
+  max-width: calc(100vw - 24px);
+  padding: 7px 10px;
+  border-radius: 11px;
+  background: rgba(8, 13, 29, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #fff;
-  font-size: 26px;
-  line-height: 1.1;
-  font-weight: 700;
+  font-size: clamp(14px, 2vw, 19px);
+  line-height: 1.15;
+  font-weight: 650;
   white-space: nowrap;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(3px);
   transition: opacity 0.15s linear;
   will-change: transform, opacity;
 }
-.q-label--ok {
-  border-color: #4ef39a;
-  box-shadow: 0 0 30px rgba(53, 208, 127, 0.65), inset 0 0 20px rgba(53, 208, 127, 0.18);
-}
-.q-label--bad {
-  border-color: #ff7d92;
-  box-shadow: 0 0 22px rgba(255, 84, 112, 0.45);
-}
-.q-label--unit { font-size: 30px; font-weight: 900; letter-spacing: 0.02em; }
+.q-label--unit { font-size: clamp(16px, 2.4vw, 22px); font-weight: 800; letter-spacing: 0.02em; }
 .q-label--roof { border-style: double; border-width: 3px; }
 .q-label--roof::after {
   content: "▲";
@@ -110,25 +102,16 @@ body::after {
   vertical-align: super;
 }
 .q-label .katex { font-size: 1em; }
-
-/* Всплывающие очки (+15, +240) */
-.float-text {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  font-size: 26px;
-  font-weight: 900;
-  color: #fff;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 14px currentColor;
-  pointer-events: none;
-  will-change: transform, opacity;
-  animation: floatUp 0.9s ease-out forwards;
+.q-label__line { display: block; white-space: nowrap; line-height: 1.05; }
+.q-label__line + .q-label__line { margin-top: 2px; }
+.q-label--correct {
+  background: rgba(8, 88, 48, 0.98);
+  border-color: #8bffc0;
+  box-shadow: 0 0 18px rgba(70, 232, 141, 0.72);
+  color: #effff5;
 }
-.float-text--coin { color: var(--c4); }
-.float-text--ok { color: #7df0a8; font-size: 30px; }
-@keyframes floatUp {
-  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
-  25% { transform: translate(-50%, -95%) scale(1.15); opacity: 1; }
-  100% { transform: translate(-50%, -200%) scale(1); opacity: 0; }
+.q-label--incorrect {
+  filter: grayscale(0.65) brightness(0.72);
 }
 
 /* ---------- HUD ---------- */
@@ -191,21 +174,26 @@ body::after {
 .hud__question {
   align-self: center;
   text-align: center;
-  margin-top: 12px;
-  padding: 10px 24px 13px;
-  border-radius: 18px;
-  max-width: min(760px, 92vw);
-  border: 2px solid transparent;
-  background:
-    linear-gradient(160deg, rgba(20, 26, 56, 0.95), rgba(10, 14, 36, 0.95)) padding-box,
-    linear-gradient(120deg, var(--c1), var(--c2), var(--c3)) border-box;
-  box-shadow: 0 12px 40px rgba(124, 108, 255, 0.35);
-  animation: slideDown 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: min(720px, calc(100vw - 28px));
+  margin-top: 10px;
+  padding: 12px 18px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(156, 228, 255, 0.62);
+  background: rgba(7, 13, 31, 0.97);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.46);
+  backdrop-filter: blur(8px);
 }
-.hud__prompt-text { margin: 0 0 5px; font-size: 13px; color: var(--c1); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7); }
-.hud__prompt-row { display: flex; gap: 10px; align-items: baseline; justify-content: center; flex-wrap: wrap; }
-.hud__prompt-math { font-size: 30px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7); }
-.hud__prompt-title { font-size: 26px; font-weight: 800; text-shadow: 0 3px 10px rgba(0, 0, 0, 0.75); }
+.hud__prompt-text { margin: 0 0 6px; font-size: 12px; color: #9feaff; letter-spacing: 0.04em; font-weight: 650; }
+.hud__prompt-row { display: grid; gap: 3px; justify-items: center; }
+.hud__prompt-math { font-size: clamp(25px, 4.5vw, 38px); line-height: 1.25; color: #fff; }
+.hud__prompt-title { max-width: 100%; font-size: clamp(17px, 2.5vw, 23px); line-height: 1.25; font-weight: 750; }
+.hud--question .hud__top { opacity: 0.58; }
+.hud--question .hud__stat::before,
+.hud--question .life,
+.hud--question .hud__combo { animation: none; }
+.hud--question .hud__stat-value.bump { animation: none; }
+.hud--question .hud__bottom { opacity: 0.24; }
+.hud__top, .hud__bottom { transition: opacity 0.18s linear; }
 
 .hud__bottom { display: flex; align-items: flex-end; gap: 14px; margin-top: auto; }
 .hud__biome, .hud__speed, .hud__combo {
@@ -220,38 +208,6 @@ body::after {
 .hud__speed { color: #fff; background: linear-gradient(150deg, #3a3f86, #1e2050); }
 .hud__combo { margin-left: auto; color: #062a18; background: linear-gradient(150deg, #7df0a8, #2fbf6d); animation: pulse 1s ease-in-out infinite; }
 .hud__combo.bump { animation: bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-/* Пройденная формула (дублируется сверху) */
-.hud__recent {
-  align-self: center;
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 14px;
-  border-radius: 14px;
-  max-width: min(780px, 94vw);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  background: rgba(12, 16, 36, 0.82);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
-  animation: slideDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.hud__recent-badge {
-  font-size: 13px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 4px 9px;
-  border-radius: 8px;
-  background: rgba(53, 208, 127, 0.2);
-  color: #7df0a8;
-}
-.hud__recent-math { font-size: 25px; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7); }
-.hud__recent-title { font-size: 15px; color: var(--muted); text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8); }
-.hud__recent--ok { border-color: rgba(53, 208, 127, 0.7); box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4), 0 0 20px rgba(53, 208, 127, 0.35); }
-.hud__recent--bad { border-color: rgba(255, 84, 112, 0.7); }
-.hud__recent--bad .hud__recent-badge { background: rgba(255, 84, 112, 0.2); color: #ff8aa0; }
-.hud__recent.bump { animation: bump 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
 /* ---------- Оверлеи ---------- */
 .overlay {
@@ -448,32 +404,6 @@ kbd {
 
 .pause-btn { position: fixed; top: 14px; right: 16px; z-index: 15; padding: 9px 18px; font-size: 14px; }
 
-/* Подсказка про свайпы */
-.swipe-hint {
-  position: fixed;
-  left: 50%;
-  bottom: 214px;
-  transform: translateX(-50%);
-  z-index: 14;
-  padding: 10px 16px;
-  border-radius: 14px;
-  background: rgba(12, 16, 36, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #eef1ff;
-  font-size: 14px;
-  font-weight: 600;
-  pointer-events: none;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.4);
-  animation: hintFade 2.7s ease-out forwards;
-}
-.swipe-hint b { color: var(--c1); }
-@keyframes hintFade {
-  0% { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
 /* Управление на телефоне — свайпами (экранных кнопок нет). */
 
 /* ---------- Анимации ---------- */
@@ -482,7 +412,6 @@ kbd {
 @keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 @keyframes shine { 0%, 55% { transform: translateX(-130%); } 100% { transform: translateX(130%); } }
 @keyframes popIn { 0% { transform: scale(0.7) translateY(14px); opacity: 0; } 60% { transform: scale(1.04) translateY(0); opacity: 1; } 100% { transform: scale(1); } }
-@keyframes slideDown { 0% { transform: translateY(-16px) scale(0.96); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
 @keyframes slideUp { 0% { transform: translateY(14px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
 @keyframes bump { 0% { transform: scale(1); } 40% { transform: scale(1.28); } 100% { transform: scale(1); } }
 @keyframes pulse { 0%, 100% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 0 0 rgba(53, 208, 127, 0); } 50% { box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 0 22px rgba(53, 208, 127, 0.75); } }
@@ -494,11 +423,12 @@ kbd {
 @media (max-width: 560px) {
   .panel { padding: 22px 18px; }
   .panel__title { font-size: 27px; }
-  .hud__question { padding: 8px 14px 10px; }
-  .hud__prompt-title { font-size: 18px; }
-  .hud__prompt-math { font-size: 20px; }
-  .q-label { font-size: 19px; padding: 7px 11px; border-radius: 12px; }
-  .q-label--unit { font-size: 22px; }
+  .hud { padding: 8px 9px; }
+  .hud__question { margin-top: 7px; padding: 9px 12px 10px; border-radius: 11px; }
+  .hud__prompt-math { font-size: clamp(22px, 6vw, 30px); }
+  .hud__prompt-title { font-size: clamp(16px, 4.2vw, 20px); }
+  .q-label { max-width: calc(100vw - 20px); font-size: 14px; padding: 5px 6px; border-radius: 9px; }
+  .q-label--unit { font-size: 17px; }
   .hud__bottom { gap: 8px; margin-bottom: 8px; }
   .hud__biome, .hud__speed, .hud__combo { font-size: 12px; padding: 5px 10px; }
 }
