@@ -56,7 +56,7 @@
         <li><b>Прыжок:</b> <kbd>↑</kbd>, <kbd>Space</kbd> или свайп вверх — через низкие барьеры и <b>на крышу вагона</b>, по ней можно бежать.</li>
         <li><b>Подкат:</b> <kbd>↓</kbd> или свайп вниз — под высокие барьеры.</li>
         <li><b>Ховерборд:</b> подбирай щит — он поглотит одно столкновение.</li>
-        <li><b>Телефон:</b> кнопки внизу экрана (◀ ▶ — полосы, ▲ — прыжок, ▼ — подкат).</li>
+        <li><b>Телефон:</b> управление свайпами — <b>↑</b> прыжок, <b>↓</b> подкат, <b>←</b> <b>→</b> смена полосы.</li>
       </ul>
       <button type="button" class="btn btn--primary" id="startBtn">Поехали</button>
       <p class="panel__hint">Разделы физики сменяются биомами по мере бега.</p>
@@ -82,13 +82,6 @@
   </div>
 
   <button type="button" class="btn btn--ghost pause-btn" id="pauseBtn" hidden>Пауза</button>
-
-  <div class="controls" id="controls" hidden>
-    <button type="button" class="ctrl ctrl--left" data-act="left" aria-label="Влево">&#9664;</button>
-    <button type="button" class="ctrl ctrl--right" data-act="right" aria-label="Вправо">&#9654;</button>
-    <button type="button" class="ctrl ctrl--roll" data-act="roll" aria-label="Подкат">&#9660;</button>
-    <button type="button" class="ctrl ctrl--jump" data-act="jump" aria-label="Прыжок">&#9650;</button>
-  </div>
   <div class="overlay" id="paused" hidden>
     <div class="panel panel--small">
       <h2 class="panel__title">Пауза</h2>

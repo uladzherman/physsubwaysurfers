@@ -345,38 +345,7 @@ kbd {
   100% { opacity: 0; }
 }
 
-/* ---------- Мобильное управление ---------- */
-.controls { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
-.ctrl {
-  position: absolute;
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.85);
-  color: #fff;
-  font-size: 26px;
-  display: grid;
-  place-items: center;
-  pointer-events: auto;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.45);
-  transition: transform 0.1s, filter 0.1s;
-}
-.ctrl:active { transform: scale(0.9); filter: brightness(1.15); }
-.ctrl--left { left: 16px; bottom: 104px; background: linear-gradient(150deg, #4ee0d4, #159aa0); }
-.ctrl--right { left: 108px; bottom: 104px; background: linear-gradient(150deg, #4ee0d4, #159aa0); }
-.ctrl--roll { right: 108px; bottom: 104px; background: linear-gradient(150deg, #ff8ab0, #d23b6e); }
-.ctrl--jump {
-  right: 16px;
-  bottom: 104px;
-  width: 90px;
-  height: 90px;
-  font-size: 32px;
-  background: linear-gradient(150deg, var(--c1), var(--c2));
-  box-shadow: 0 12px 30px rgba(110, 231, 255, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.5);
-}
+/* Управление на телефоне — свайпами (экранных кнопок нет). */
 
 /* ---------- Анимации ---------- */
 @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
@@ -402,6 +371,4 @@ kbd {
   .q-label { font-size: 17px; padding: 7px 10px; }
   .hud__bottom { gap: 8px; margin-bottom: 8px; }
   .hud__biome, .hud__speed, .hud__combo { font-size: 12px; padding: 5px 10px; }
-  .ctrl { width: 68px; height: 68px; }
-  .ctrl--jump { width: 82px; height: 82px; }
 }

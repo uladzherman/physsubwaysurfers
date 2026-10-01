@@ -937,7 +937,7 @@ window.addEventListener("keydown", (e) => {
 let touchStart = null;
 function swipeTargetOk(target) {
   if (!(target instanceof Element)) return true;
-  return !target.closest(".ctrl, .btn, .pause-btn, .panel, .overlay");
+  return !target.closest(".btn, .pause-btn, .panel, .overlay");
 }
 document.addEventListener("touchstart", (e) => {
   if (state.mode !== "playing") { touchStart = null; return; }
@@ -977,23 +977,9 @@ window.addEventListener("mouseup", (e) => {
   mouseStart = null;
 });
 
-/* ---------------- Мобильное управление ---------------- */
-const controlsEl = byId("controls");
+/* ---------------- Мобильное управление: только свайпы ---------------- */
 const isTouch = ("ontouchstart" in window) || (navigator.maxTouchPoints || 0) > 0;
 if (isTouch) document.body.classList.add("touch");
-if (controlsEl) {
-  const act = (a) => {
-    if (a === "left") moveLane(-1);
-    else if (a === "right") moveLane(1);
-    else if (a === "jump") jump();
-    else if (a === "roll") roll();
-  };
-  controlsEl.querySelectorAll(".ctrl").forEach((btn) => {
-    const a = btn.getAttribute("data-act");
-    btn.addEventListener("pointerdown", (e) => { e.preventDefault(); act(a); }, { passive: false });
-    btn.addEventListener("contextmenu", (e) => e.preventDefault());
-  });
-}
 
 /* ---------------- Столкновения ---------------- */
 function recordMistake(item) {
@@ -1159,7 +1145,6 @@ function startGame() {
   pausedEl.hidden = true;
   pauseBtn.hidden = false;
   comboEl.hidden = true;
-  if (controlsEl) controlsEl.hidden = !isTouch;
   if (isTouch) showSwipeHint();
 }
 
@@ -1178,7 +1163,7 @@ function gameOver() {
   pauseBtn.hidden = true;
   hud.hidden = true;
   questionBox.hidden = true;
-  if (controlsEl) controlsEl.hidden = true;
+
   byId("finalScore").textContent = String(Math.floor(state.score));
   byId("finalDistance").textContent = Math.round(state.distance) + " м";
   byId("finalCorrect").textContent = String(state.correct);
@@ -1486,7 +1471,6 @@ byId("quitBtn").addEventListener("click", () => {
   pausedEl.hidden = true;
   hud.hidden = true;
   menuEl.hidden = false;
-  if (controlsEl) controlsEl.hidden = true;
 });
 document.addEventListener("visibilitychange", () => {
   if (document.hidden && state.mode === "playing") togglePause();
