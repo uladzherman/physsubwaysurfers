@@ -17,6 +17,7 @@
 <body>
   <div id="scene" aria-hidden="true"></div>
   <div id="labels" aria-hidden="true"></div>
+  <div id="speedlines" aria-hidden="true"></div>
 
   <div class="hud" id="hud" hidden>
     <div class="hud__top">
@@ -29,6 +30,12 @@
         <span class="hud__stat-value" id="coins">0</span>
       </div>
       <div class="hud__lives" id="lives" aria-label="Жизни"></div>
+    </div>
+
+    <div class="hud__recent" id="recent" hidden>
+      <span class="hud__recent-badge" id="recentBadge">Верно</span>
+      <span class="hud__recent-math" id="recentMath"></span>
+      <span class="hud__recent-title" id="recentTitle"></span>
     </div>
 
     <div class="hud__question" id="questionBox" hidden>
@@ -47,19 +54,36 @@
   </div>
 
   <div class="overlay" id="menu">
-    <div class="panel">
+    <div class="panel panel--menu">
       <h1 class="panel__title">Формула&#8209;Раннер</h1>
-      <p class="panel__subtitle">Собирай верные формулы и единицы СИ, уклоняйся от ошибок. Контент тренажёра по физике (ЦЭ/ЦТ).</p>
+      <p class="panel__subtitle">Собирай верные формулы и единицы СИ, уклоняйся от ошибок. Тренажёр по физике (ЦЭ/ЦТ).</p>
+
       <ul class="panel__rules">
-        <li><b>Ворота вопросов:</b> зелёный портал — верный ответ (собери), красный барьер — ошибка (не врезайся).</li>
+        <li><b>Ворота:</b> зелёный портал — верный ответ, красный — ошибка.</li>
         <li><b>Полосы:</b> <kbd>←</kbd> <kbd>→</kbd> или свайп влево/вправо.</li>
-        <li><b>Прыжок:</b> <kbd>↑</kbd>, <kbd>Space</kbd> или свайп вверх — через низкие барьеры и <b>на крышу вагона</b>, по ней можно бежать.</li>
-        <li><b>Подкат:</b> <kbd>↓</kbd> или свайп вниз — под высокие барьеры.</li>
-        <li><b>Ховерборд:</b> подбирай щит — он поглотит одно столкновение.</li>
-        <li><b>Телефон:</b> управление свайпами — <b>↑</b> прыжок, <b>↓</b> подкат, <b>←</b> <b>→</b> смена полосы.</li>
+        <li><b>Прыжок:</b> <kbd>↑</kbd>, <kbd>Space</kbd> или свайп вверх — в том числе на крышу вагона.</li>
+        <li><b>Подкат:</b> <kbd>↓</kbd> или свайп вниз — под высокие фермы.</li>
+        <li><b>Щит:</b> ховерборд гасит одно столкновение.</li>
+        <li><b>Телефон:</b> свайпы: <b>↑</b> прыжок, <b>↓</b> подкат, <b>←</b> <b>→</b> полосы.</li>
       </ul>
+
+      <div class="settings">
+        <div class="settings__group">
+          <span class="settings__label">Разделы физики</span>
+          <div class="chips" id="sectionChips"></div>
+        </div>
+        <div class="settings__group">
+          <span class="settings__label">Скорость и сложность</span>
+          <div class="chips" id="speedChips">
+            <button type="button" class="chip" data-speed="slow">Спокойно</button>
+            <button type="button" class="chip is-active" data-speed="normal">Обычно</button>
+            <button type="button" class="chip" data-speed="fast">Быстро</button>
+          </div>
+        </div>
+      </div>
+
       <button type="button" class="btn btn--primary" id="startBtn">Поехали</button>
-      <p class="panel__hint">Разделы физики сменяются биомами по мере бега.</p>
+      <p class="panel__hint" id="menuHint">Вопросы берутся из выбранных разделов.</p>
     </div>
   </div>
 
@@ -97,7 +121,12 @@
   <script src="assets/js/questions.js"></script>
 
   <script type="importmap">
-    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
   </script>
   <script type="module" src="assets/js/game.js"></script>
 </body>
