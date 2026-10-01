@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Формула-Раннер — физический бесконечный забег</title>
+  <meta name="description" content="Бесконечный 3D-раннер по физике: собирай верные формулы и единицы СИ, уклоняйся от ошибок. Контент тренажёра ЦЭ/ЦТ.">
+  <meta name="theme-color" content="#0d1020">
+  <link rel="icon" href="data:,">
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+        integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+"
+        crossorigin="anonymous">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="scene" aria-hidden="true"></div>
+  <div id="labels" aria-hidden="true"></div>
+
+  <div class="hud" id="hud" hidden>
+    <div class="hud__top">
+      <div class="hud__stat">
+        <span class="hud__stat-label">Очки</span>
+        <span class="hud__stat-value" id="score">0</span>
+      </div>
+      <div class="hud__stat hud__stat--coins">
+        <span class="hud__stat-label">Единицы</span>
+        <span class="hud__stat-value" id="coins">0</span>
+      </div>
+      <div class="hud__lives" id="lives" aria-label="Жизни"></div>
+    </div>
+
+    <div class="hud__question" id="questionBox" hidden>
+      <p class="hud__prompt-text" id="promptText"></p>
+      <div class="hud__prompt-row">
+        <span class="hud__prompt-math" id="promptMath"></span>
+        <span class="hud__prompt-title" id="promptTitle"></span>
+      </div>
+    </div>
+
+    <div class="hud__bottom">
+      <div class="hud__biome" id="biome">Кинематика</div>
+      <div class="hud__speed"><span id="speedVal">0</span> км/ч</div>
+      <div class="hud__combo" id="combo" hidden></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="menu">
+    <div class="panel">
+      <h1 class="panel__title">Формула&#8209;Раннер</h1>
+      <p class="panel__subtitle">Собирай верные формулы и единицы СИ, уклоняйся от ошибок. Контент тренажёра по физике (ЦЭ/ЦТ).</p>
+      <ul class="panel__rules">
+        <li><b>Ворота вопросов:</b> зелёный портал — верный ответ (собери), красный барьер — ошибка (не врезайся).</li>
+        <li><b>Полосы:</b> <kbd>←</kbd> <kbd>→</kbd> или свайп влево/вправо.</li>
+        <li><b>Прыжок:</b> <kbd>↑</kbd>, <kbd>Space</kbd> или свайп вверх — через низкие барьеры и <b>на крышу вагона</b>, по ней можно бежать.</li>
+        <li><b>Подкат:</b> <kbd>↓</kbd> или свайп вниз — под высокие барьеры.</li>
+        <li><b>Ховерборд:</b> подбирай щит — он поглотит одно столкновение.</li>
+        <li><b>Телефон:</b> кнопки внизу экрана (◀ ▶ — полосы, ▲ — прыжок, ▼ — подкат).</li>
+      </ul>
+      <button type="button" class="btn btn--primary" id="startBtn">Поехали</button>
+      <p class="panel__hint">Разделы физики сменяются биомами по мере бега.</p>
+    </div>
+  </div>
+
+  <div class="overlay" id="gameover" hidden>
+    <div class="panel">
+      <h2 class="panel__title">Забег окончен</h2>
+      <div class="result">
+        <div class="result__row"><span>Очки</span><b id="finalScore">0</b></div>
+        <div class="result__row"><span>Пройдено</span><b id="finalDistance">0 м</b></div>
+        <div class="result__row"><span>Верных ответов</span><b id="finalCorrect">0</b></div>
+        <div class="result__row"><span>Ошибок</span><b id="finalWrong">0</b></div>
+        <div class="result__row"><span>Единиц собрано</span><b id="finalCoins">0</b></div>
+      </div>
+      <div class="panel__review" id="reviewBox" hidden>
+        <p class="panel__review-title">Стоит повторить:</p>
+        <ul class="panel__review-list" id="reviewList"></ul>
+      </div>
+      <button type="button" class="btn btn--primary" id="againBtn">Ещё раз</button>
+    </div>
+  </div>
+
+  <button type="button" class="btn btn--ghost pause-btn" id="pauseBtn" hidden>Пауза</button>
+
+  <div class="controls" id="controls" hidden>
+    <button type="button" class="ctrl ctrl--left" data-act="left" aria-label="Влево">&#9664;</button>
+    <button type="button" class="ctrl ctrl--right" data-act="right" aria-label="Вправо">&#9654;</button>
+    <button type="button" class="ctrl ctrl--roll" data-act="roll" aria-label="Подкат">&#9660;</button>
+    <button type="button" class="ctrl ctrl--jump" data-act="jump" aria-label="Прыжок">&#9650;</button>
+  </div>
+  <div class="overlay" id="paused" hidden>
+    <div class="panel panel--small">
+      <h2 class="panel__title">Пауза</h2>
+      <button type="button" class="btn btn--primary" id="resumeBtn">Продолжить</button>
+      <button type="button" class="btn btn--ghost" id="quitBtn">В меню</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+          integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg"
+          crossorigin="anonymous"></script>
+  <script src="assets/js/data/cards.js"></script>
+  <script src="assets/js/questions.js"></script>
+
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+  <script type="module" src="assets/js/game.js"></script>
+</body>
+</html>
